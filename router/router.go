@@ -20,6 +20,7 @@ func NewRouter(dependencies service.Dependencies) http.Handler {
 	setProjectRouter(r)
 	setLoginRouter(r)
 	setDashboardRouter(r)
+	setEnrollmentRouter(r)
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	return loggedRouter
@@ -60,4 +61,9 @@ func setLoginRouter(router *mux.Router) {
 
 func setDashboardRouter(router *mux.Router) {
 	router.Methods(http.MethodGet).Path("/dashboard").Handler(handler.DashboardHandler())
+}
+
+func setEnrollmentRouter(router *mux.Router) {
+	router.Methods(http.MethodPut).Path("/enrollment_status/update/{id}").Handler(handler.UpdateEnrollmentStatusHandler())
+	router.Methods(http.MethodGet).Path("/enrollment_status").Handler(handler.ReadAllUserHandler())
 }

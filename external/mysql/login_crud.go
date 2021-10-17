@@ -34,3 +34,18 @@ func Register(user *User) (err error) {
 	db.dbConnection.Create(user)
 	return nil
 }
+
+func GetAllUser() (user []User, err error) {
+	db, _ := InitMigrationUser()
+	db.dbConnection.Find(&user)
+	return user, nil
+}
+
+func UpdateUser(id uint, user User) (err error) {
+	db, err := InitMigrationUser()
+	if err != nil {
+		return err
+	}
+	db.dbConnection.Model(&user).Where("id=?", id).Updates(&user)
+	return nil
+}
