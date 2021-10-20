@@ -54,3 +54,22 @@ func InviteUser(invited *Invited) (err error) {
 	db.dbConnection.Create(invited)
 	return nil
 }
+
+func DeleteInvitedUser(UserId uint64, ProjectId uint64) (err error) {
+	db, err := InitMigrationInv()
+	if err != nil {
+		return err
+	}
+	var invited Invited
+	db.dbConnection.Model(&invited).Where("invited_user_id=? AND project_id=?", UserId, ProjectId).Delete(&invited)
+	return nil
+}
+
+func CreateCollaborator(collaborator *Collaborator) (err error) {
+	db, err := InitMigrationCol()
+	if err != nil {
+		return err
+	}
+	db.dbConnection.Create(collaborator)
+	return nil
+}

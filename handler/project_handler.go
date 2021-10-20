@@ -185,3 +185,49 @@ func InviteUserHandler() http.HandlerFunc {
 		responder.NewHttpResponse(r, w, http.StatusCreated, invited, nil)
 	}
 }
+
+func AcceptInvitedHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		var collaborator mysql.Collaborator
+		payloads, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			responder.NewHttpResponse(r, w, http.StatusBadRequest, nil, err)
+			return
+		}
+		json.Unmarshal(payloads, &collaborator)
+
+		err = mysql.DeleteInvitedUser(uint64(collaborator.CollaboratorUserId), uint64(collaborator.ProjectId))
+		if err != nil {
+			responder.NewHttpResponse(r, w, http.StatusBadRequest, nil, err)
+			return
+		}
+		err = mysql.CreateCollaborator(&collaborator)
+		if err != nil {
+			responder.NewHttpResponse(r, w, http.StatusBadRequest, nil, err)
+			return
+		}
+		responder.NewHttpResponse(r, w, http.StatusOK, nil, nil)
+	}
+}
+
+func IgnoreInvitedHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		var collaborator mysql.Collaborator
+		payloads, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			responder.NewHttpResponse(r, w, http.StatusBadRequest, nil, err)
+			return
+		}
+		json.Unmarshal(payloads, &collaborator)
+
+		err = mysql.DeleteInvitedUser(uint64(collaborator.CollaboratorUserId), uint64(collaborator.ProjectId))
+		if err != nil {
+			responder.NewHttpResponse(r, w, http.StatusBadRequest, nil, err)
+			return
+		}
+
+		responder.NewHttpResponse(r, w, http.StatusOK, nil, nil)
+	}
+}

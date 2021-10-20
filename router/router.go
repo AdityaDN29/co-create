@@ -50,7 +50,6 @@ func setProjectRouter(router *mux.Router) {
 	router.Methods(http.MethodGet).Path("/project/list").Handler(handler.ReadAllProjectHandler())
 	router.Methods(http.MethodPost).Path("/project/create").Handler(handler.CreateProjectHandler())
 	router.Methods(http.MethodDelete).Path("/project/delete/{id}").Handler(handler.DeleteProjectHandler())
-	router.Methods(http.MethodPost).Path("/project/{id}/invite").Handler(handler.InviteUserHandler())
 	router.Methods(http.MethodPut).Path("/project/update/{id}").Handler(handler.UpdateProjectHandler())
 }
 
@@ -66,4 +65,10 @@ func setDashboardRouter(router *mux.Router) {
 func setEnrollmentRouter(router *mux.Router) {
 	router.Methods(http.MethodPut).Path("/enrollment_status/update/{id}").Handler(handler.UpdateEnrollmentStatusHandler())
 	router.Methods(http.MethodGet).Path("/enrollment_status").Handler(handler.ReadAllUserHandler())
+}
+
+func setInvitedRouter(router *mux.Router) {
+	router.Methods(http.MethodPost).Path("/invite").Handler(handler.AcceptInvitedHandler())
+	router.Methods(http.MethodPost).Path("/invite/{id}").Handler(handler.InviteUserHandler())
+	router.Methods(http.MethodPost).Path("/invite").Handler(handler.IgnoreInvitedHandler())
 }
